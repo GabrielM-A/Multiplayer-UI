@@ -16,10 +16,13 @@ public class CharacterSelect : MonoBehaviour
         renderer = GetComponentInChildren<MeshRenderer>();
     }
 
+    /** Used to show the ready icon when the player is ready */
     public void ShowReady()
     {
         readyGameObject.SetActive(true);
     }
+    
+    /** Used to hide the ready icon when the player is not ready */
     public void HideReady()
     {
         readyGameObject.SetActive(false);
