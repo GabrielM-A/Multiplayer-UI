@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 57775dff002f14f4db03e9bd3e863c8d
+timeCreated: 1498897412
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Mongolian Baiti
+  fontNames:
+  - Mongolian Baiti
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

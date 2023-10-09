@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c801bf8c630d8644e9b4bb561ac6eace
+timeCreated: 1498791644
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Ringbearer
+  fontNames:
+  - Ringbearer
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

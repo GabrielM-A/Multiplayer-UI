@@ -1,0 +1,116 @@
+:root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-image: url('../Art/Background.png');
+    --unity-metrics-single_line-height: 500px;
+    
+}
+.unity-scroll-view {
+    margin-top:50px;
+}
+.lobbyLabel {
+    width: 100%;
+}
+.unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: flex;
+    width: 1500px;
+    height:500px;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+    padding: 10px;
+}
+
+.menuPaper {
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-image: url('../Art/PaperBackgroundDark.png');
+    opacity:0.9;
+    display: flex;
+    align-items:center;
+    justify-content: flex-start;
+    transition: 1s transform;
+    transform-origin: bottom;
+}
+.menuButton {
+    width: 250px;
+    display: flex;
+    height: 110px;
+    align-items: center;
+    font-size: 22px;
+    justify-content: center;
+    background-image:url('../Art/ButtonBackground.png');
+    transition: 0.2s all;
+    padding:20px;
+    border-width: 0px;
+    background-color: rgba(255, 0, 0, 0);
+    color: #3d3835;
+}
+.menuButton:hover {
+    scale: 1.1;
+    color: #564e4d;
+    background-image: url('../Art/PaperBackgroundDark.png');
+}
+.startButton {
+    cursor: url('./Art/G_Cursor_Basic.png') 0 0;
+    margin-top: 10px;
+}
+
+.separator {
+    width: 90%;
+    height: 5px;
+    margin-top: 10px;
+    background-image: url('../Art/Brown_Line.png');
+    margin-bottom: 10px;
+}
+.multiplayerTitleContainer, .singlePlayerTitleContainer {
+    display: flex;
+    flex-direction: row;
+    margin-top:20px;
+    align-items: center;
+    justify-content: center;
+}
+.multiplayerTitle, .singlePlayerTitle {
+    font-size: 30px;
+    color: #cfae9d;
+    -unity-font-definition: url('../Fonts/Cambria Regular SDF.asset');
+}
+.multiplayerTitleIcon {
+    width: 30px;
+    height: 30px;
+    background-image: url('../Art/MultiplayerIcon.png');
+    margin-right: 10px;
+}
+.singlePlayerTitleIcon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    background-image: url('../Art/SinglePlayerIcon.png');
+}
+
+.mainMenuTitle {
+    margin-top:30px;
+    margin-bottom: 40px;
+    color: #cfae9d;
+    font-size: 100px;
+    letter-spacing: 2px;
+    -unity-font-definition: url('../Fonts/Ringbearer Medium SDF.asset');
+}
+
+.menuButtonText {
+    font-size: 30px;
+    letter-spacing: 2px;
+    -unity-font-definition: url('../Fonts/Ringbearer Medium SDF.asset');
+}
