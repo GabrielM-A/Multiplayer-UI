@@ -50,6 +50,7 @@ public class GameNetworkManager : NetworkBehaviour
     
     public string GetPlayerName()
     {
+        Debug.Log(playerName);
         return playerName;
     }
     
@@ -98,8 +99,12 @@ public class GameNetworkManager : NetworkBehaviour
             clientId = clientId,
             index = playerDataNetworkList.Count,
             characterId = colorList[playerDataNetworkList.Count],
-            playerReady = false
+            playerReady = false,
+            playerName = GetPlayerName()
         });
+        Debug.Log("PLAYER CONNECTED: " + playerDataNetworkList[0].playerName);
+        if (playerDataNetworkList.Count <= 1) return; 
+        Debug.Log("PLAYER CONNECTED @:" + playerDataNetworkList[1].playerName);
     }
     
     
@@ -140,7 +145,25 @@ public class GameNetworkManager : NetworkBehaviour
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientUserConnected;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default)
+    {
+        Debug.Log("SERVER RPC PLAYER NAME: " + playerName);
+        PlayerData playerData = GetPlayerDataFromClientId(serverRpcParams.Receive.SenderClientId);
+        playerData.playerName = playerName;
+        playerDataNetworkList[playerData.index] = playerData;
+        Debug.Log("BAKED INTO NETWORK LIST: " + playerDataNetworkList[playerData.index].playerName);
+    }
+
+    private void OnClientUserConnected(ulong obj)
+    {
+        Debug.Log("CLIENT CONNECTED: " + GetPlayerName());
+        SetPlayerNameServerRpc(GetPlayerName());
+    }
+
 
     /** Multiplayer: shows the lobby list */
     private void ShowLobby()

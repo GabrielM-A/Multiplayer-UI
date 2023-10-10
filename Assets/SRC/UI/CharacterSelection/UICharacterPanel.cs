@@ -135,7 +135,8 @@ public class UICharacterPanel : MonoBehaviour
             }
             var playerLabel = new Label();
             playerLabel.AddToClassList("playerLabel");
-            playerLabel.text = GameNetworkManager.instance.playerDataNetworkList[i].clientId.ToString();
+            Debug.Log("NAME: " + GameNetworkManager.instance.playerDataNetworkList[i].playerName.ToString());
+            playerLabel.text = GameNetworkManager.instance.playerDataNetworkList[i].playerName.ToString();
             playerRowContainer.Add(playerLabel);
         }
     }

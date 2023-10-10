@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,10 +9,14 @@ public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable
     public int index;
     public Color characterId;
     public bool playerReady;
+    public FixedString64Bytes playerName;
 
     public  bool Equals(PlayerData other)
     {
-        return clientId == other.clientId && index == other.index && characterId == other.characterId;
+        return clientId == other.clientId 
+               && index == other.index
+               && characterId == other.characterId
+               && playerName == other.playerName;
     }
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -20,5 +25,6 @@ public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable
         serializer.SerializeValue(ref index);
         serializer.SerializeValue(ref characterId);
         serializer.SerializeValue(ref playerReady);
+        serializer.SerializeValue(ref playerName);
     }
 }
