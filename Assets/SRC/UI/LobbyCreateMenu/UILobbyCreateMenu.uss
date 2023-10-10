@@ -139,3 +139,28 @@
     background-image: url('../Art/btn.png');
     opacity: 0.5;
 }
+.lobbyToggleContainer {
+    display: flex;
+    flex-direction: row;
+    height:100px;
+    align-items: center;
+    justify-content: center;
+    width:50%;
+}
+.lobbyToggle {
+    height:60px;
+    background-color: rgba(207, 174, 157, 0);
+    color: #cfae9d;
+    border-width: 0px;
+    font-size: 50px;
+    -unity-font-definition: url('../Fonts/Ringbearer Medium SDF.asset');
+}
+.lobbyToggle:hover {
+    scale: 1.1;
+    color: #756157;
+    opacity: 0.5;
+}
+.selected {
+    color: #b79550;
+    background-image: url('../Art/btn.png');
+}

@@ -135,3 +135,44 @@
     -unity-font-definition: url('../Fonts/Ringbearer Medium SDF.asset');
     color: #a48c3d;
 }
+.playerNameContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top:35%;
+    margin-top: 20px;
+}
+.playerNameText {
+    width: 80%;
+    height: 80px;
+    margin-top: 20px;
+    min-width: 80%;
+    background-image: url('../Art/Input_Background.png');
+    background-color: rgba(255, 0, 0, 0);
+    min-height:80px;
+}
+.profileButton {
+    width: 250px;
+    display: flex;
+    height: 110px;
+    align-items: center;
+    font-size: 22px;
+    justify-content: center;
+    background-image:url('../Art/ButtonBackground.png');
+    -unity-background-image-tint-color: #d0b196;
+    transition: 0.1s all ease-in-bounce;
+    padding:20px;
+    border-width: 0px;
+    background-color: rgba(255, 0, 0, 0);
+    color: #3d3835;
+}
+.profileButton:hover {
+    scale: 1.1;
+    color: #dedede;
+    background-image: url('../Art/btn.png');
+    opacity: 0.5;
+}

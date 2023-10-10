@@ -5,12 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
+using Toggle = UnityEngine.UIElements.Toggle;
 
 [ExecuteInEditMode]
 public class UILobbyCreateMenu : MonoBehaviour
 {
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private StyleSheet _styleSheet;
+    private TextField lobbyNameInput; 
+    private bool privateLobby = false;
+    private Button lobbyPrivate;
+    private Button lobbyPublic;
+    private int maxPlayers = 4;
+    private Label maxPlayerControlValueLabel;
+
     void OnEnable()
     {
         StartCoroutine(Generate());
@@ -44,15 +52,43 @@ public class UILobbyCreateMenu : MonoBehaviour
         lobbySettingsContainer.Add(lobbySettingsTitle);
         lobbySettingsContainer.Add(lobbyNameLabel);
         // Create a new TextField (equivalent to an input field)
-        TextField lobbyNameInput = new TextField();
+        lobbyNameInput = new TextField();
         lobbyNameInput.AddToClassList("lobbyNameInput");
         lobbySettingsContainer.Add(lobbyNameInput);
+        // Add private or public lobby 
+        var lobbyToggleContainer = Create("lobbyToggleContainer");
+        lobbyPrivate = AddButtonTo(lobbyToggleContainer, "Private", "lobbyPrivateToggle", "lobbyToggle");
+        lobbyPublic = AddButtonTo(lobbyToggleContainer, "Public", "lobbyPublicToggle", "lobbyToggle", "selected");
+        lobbyPrivate.clicked += PrivateLobby;
+        lobbyPublic.clicked += PublicLobby;
+        
+        lobbySettingsContainer.Add(lobbyToggleContainer);
         lobbySettingsContainer.Add(lobbyMaxPlayers);
         // Max Player Controls
         MaxPlayerSection(lobbySettingsContainer);
         // Create Lobby Button
         var createLobbyBtn = AddButtonTo(lobbySettingsContainer, "Create Lobby", "createLobbyBtn");
-        createLobbyBtn.clicked += () => GameNetworkManager.instance.StartHost();
+        createLobbyBtn.clicked += CreateLobby;
+    }
+    
+    void PrivateLobby()
+    {
+        privateLobby = true;
+        lobbyPublic.RemoveFromClassList("selected");
+        lobbyPrivate.AddToClassList("selected");
+    }
+
+    void PublicLobby()
+    {
+        privateLobby = false;
+        lobbyPrivate.RemoveFromClassList("selected");
+        lobbyPublic.AddToClassList("selected");
+    }
+
+    private void CreateLobby()
+    {
+        string lobbyName = lobbyNameInput.text.Length > 0 ? lobbyNameInput.text : "Lobby";
+        LobbyAPI.instance.CreateLobby(lobbyName, privateLobby);
     }
 
     private void MaxPlayerSection(VisualElement lobbySettingsContainer)
@@ -67,10 +103,30 @@ public class UILobbyCreateMenu : MonoBehaviour
             AddButtonTo(maxPlayerControlArrowContainer, "", "maxPlayerControlDown", "maxPlayerControl");
         maxPlayerControlArrowContainer.Add(maxPlayerControlUpBtn);
         maxPlayerControlArrowContainer.Add(maxPlayerControlDownBtn);
-        var maxPlayerControlValueLabel = new Label();
+        maxPlayerControlValueLabel = new Label();
         maxPlayerControlValueLabel.AddToClassList("maxPlayerControlValueLabel");
-        maxPlayerControlValueLabel.text = "2";
+        maxPlayerControlValueLabel.text = maxPlayers.ToString();
         maxPlayerControlsContainer.Add(maxPlayerControlValueLabel);
+        maxPlayerControlUpBtn.clicked += MaxPlayersIncrease;
+        maxPlayerControlDownBtn.clicked += MaxPlayersDecrease;
+        
+    }
+    
+    private void MaxPlayersDecrease()
+    {
+        if (maxPlayers == 1) return;
+        maxPlayers--;
+        maxPlayerControlValueLabel.text = maxPlayers.ToString();
+        LobbyAPI.instance.SetMaxPlayers(maxPlayers);
+    }
+    
+    private void MaxPlayersIncrease()
+    {
+        if (maxPlayers >= 4) return;
+        maxPlayers++;
+        maxPlayerControlValueLabel.text = maxPlayers.ToString();
+        LobbyAPI.instance.SetMaxPlayers(maxPlayers);
+        Debug.Log(maxPlayers);
     }
 
     private Button AddButtonTo(VisualElement container, String text, params string[] classNames)

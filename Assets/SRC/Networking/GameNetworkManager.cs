@@ -13,10 +13,13 @@ public class GameNetworkManager : NetworkBehaviour
     public static GameNetworkManager instance;
     [SerializeField] private string characterSelectSceneName;
     [SerializeField] private string worldSceneName;
+    private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
+    private string playerName; 
     public NetworkList<PlayerData> playerDataNetworkList;
     private Dictionary<ulong, bool> playerReadyDictionary;
     public event EventHandler<ulong> OnPlayerDataNetworkListChanged;
     public event EventHandler<ulong> OnReadyChanged;
+    public event EventHandler<string> OnProfileNameChanged;
     [SerializeField] private Color[] colorList = new Color[4];
 
     /** Only one instance allowed at one time - destroy otherwise and log it
@@ -34,6 +37,8 @@ public class GameNetworkManager : NetworkBehaviour
                 OnPlayerDataNetworkListChanged?.Invoke(this, playerData.Value.clientId);
                 OnReadyChanged?.Invoke(this, playerData.Value.clientId);
             };
+            playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER,
+                "PlayerName" + UnityEngine.Random.Range(100, 1000));
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -43,6 +48,17 @@ public class GameNetworkManager : NetworkBehaviour
         }
     }
     
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+    
+    public void SetPlayerName(string playerName)
+    {
+        this.playerName = playerName;
+        PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
+        OnProfileNameChanged?.Invoke(this, playerName);
+    }
     
     /** Events for the main menu - single player and multiplayer */
     private void OnEnable()
@@ -121,7 +137,7 @@ public class GameNetworkManager : NetworkBehaviour
     }
 
     /** Multiplayer: starts the client */
-    private void StartClient()
+    public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
     }
@@ -267,5 +283,6 @@ public class GameNetworkManager : NetworkBehaviour
         {
             playerDataNetworkList.Dispose();
         }
+
     }
 }

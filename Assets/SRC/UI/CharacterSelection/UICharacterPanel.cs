@@ -11,6 +11,8 @@ public class UICharacterPanel : MonoBehaviour
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private StyleSheet _styleSheet;
     private VisualElement playerListContainer;
+    private string joinCode;
+    private string lobbyName;
     
     void OnEnable()
     {
@@ -61,8 +63,49 @@ public class UICharacterPanel : MonoBehaviour
         readyBtn.clicked += () => GameNetworkManager.instance.SetPlayerReady();
         // Kick character button 
         playerListContainer = Create("playerList");
+        // Add private join code
+        var privateJoinCodeContainer = Create("privateJoinCodeContainer");
+        var privateJoinCodeInnerContainer = Create("privateJoinCodeInnerContainer");
+        var privateJoinCodeLabel = new Label();
+        var lobbyName = new Label();
+        lobbyName.AddToClassList("lobbyName");
+        lobbyName.text = GetLobbyName();
+        privateJoinCodeInnerContainer.Add(lobbyName);
+        privateJoinCodeLabel.AddToClassList("privateJoinCodeLabel");
+        privateJoinCodeLabel.text = "Join Code: ";
+        privateJoinCodeInnerContainer.Add(privateJoinCodeLabel);
+        var privateJoinCodeValue = new Label();
+        privateJoinCodeValue.AddToClassList("privateJoinCodeValue");
+        privateJoinCodeValue.text = GetJoinCode();
+        privateJoinCodeInnerContainer.Add(privateJoinCodeValue);
+        privateJoinCodeContainer.Add(privateJoinCodeInnerContainer);
+        root.Add(privateJoinCodeContainer);
         root.Add(playerListContainer);
    
+    }
+
+    private string GetLobbyName()
+    {
+        string lobbyName;
+        if (LobbyAPI.instance)
+        {
+          lobbyName = LobbyAPI.instance.GetLobby().Name.Length > 0 ? LobbyAPI.instance.GetLobby().Name : "Lobby";
+        }
+        else
+        {
+            return "Lobby Name";
+        }
+        return lobbyName;
+    }
+
+    private string GetJoinCode()
+    {
+        if (LobbyAPI.instance)
+        {
+            joinCode = LobbyAPI.instance.GetLobby().LobbyCode;
+        }
+
+        return joinCode;
     }
 
     public void OnPlayerDataNetworkListChange(object sender, ulong clientId)

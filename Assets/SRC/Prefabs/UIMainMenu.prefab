@@ -65,3 +65,4 @@ MonoBehaviour:
   _styleSheet: {fileID: 7433441132597879392, guid: 5c6ecec30bc40d140be4602e32f754fc,
     type: 3}
   _lobbyMenu: {fileID: 0}
+  _joinCodeMenu: {fileID: 0}

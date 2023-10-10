@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UI.SFX;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 [ExecuteInEditMode]
 public class MainMenu : MonoBehaviour
@@ -11,15 +12,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private StyleSheet _styleSheet;
     [SerializeField] private GameObject _lobbyMenu;
+    [SerializeField] private GameObject _joinCodeMenu;
+    [SerializeField] private GameObject _uiProfileDialogMenu;
     private bool canPlay = true;
     public static event Action OnStartGame;
     public static event Action OnShowLobby;
     public static event Action OnStartHost;
     private List<Button> buttons = new List<Button>();
+    public TextField playerNameText;
+    private Label playerName;
 
     void Start()
     {
         StartCoroutine(Generate());
+        GameNetworkManager.instance.OnProfileNameChanged += NameChanged;
+
     }
     
     private void OnValidate()
@@ -51,6 +58,11 @@ public class MainMenu : MonoBehaviour
         // Apply to container
         root.Add(container);
     }
+    
+    private void NameChanged(object ob, string playerName)
+    {
+        this.playerName.text = playerName;
+    }
 
     private VisualElement GenerateMainContainer()
     {
@@ -71,6 +83,10 @@ public class MainMenu : MonoBehaviour
         stats.Add(statsTitle);
         var statsInnerContainer = Create("statsInnerContainer");
         stats.Add(statsInnerContainer);
+        playerName = new Label();
+        playerName.AddToClassList("highestScoreLabel");
+        playerName.text = GetPlayerName();
+        statsInnerContainer.Add(playerName);
         var highestScoreLabel = new Label();
         highestScoreLabel.AddToClassList("highestScoreLabel");
         highestScoreLabel.text = "Highest Score";
@@ -79,7 +95,26 @@ public class MainMenu : MonoBehaviour
         highestScoreValue.AddToClassList("highestScore");
         highestScoreValue.text = "0";
         statsInnerContainer.Add(highestScoreValue);
+        
+        var profileButton = AddButtonTo(statsInnerContainer, "Profile", "profileButton");
+        profileButton.clicked += ShowPlayerProfileDialog;
         root.Add(stats);
+    }
+    
+    void ShowPlayerProfileDialog()
+    {
+        _uiProfileDialogMenu.SetActive(true);
+    }
+
+    string GetPlayerName()
+    {
+        if (GameNetworkManager.instance == null)
+        {
+            return "Player Name";
+        }
+
+        Debug.Log("GAME SHOULD SHOW NEW NAME");
+        return GameNetworkManager.instance.GetPlayerName();
     }
 
     /** Creates the single player section of the main menu */
@@ -116,18 +151,29 @@ public class MainMenu : MonoBehaviour
         menu.Add(line);
         var hostBtn = AddButtonTo(menu, "Host", "menuButton", "startButton");
         var lobbyBtn = AddButtonTo(menu, "Lobby", "menuButton", "lobbyButton");
+        var joinCodeBtn = AddButtonTo(menu, "Join Private", "menuButton", "privateLobbyButton");
         buttons.Add(lobbyBtn);
         buttons.Add(hostBtn);
+        buttons.Add(joinCodeBtn);
         hostBtn.clicked += OnStartHost;
         lobbyBtn.clicked += StartClient;
+        joinCodeBtn.clicked += ShowEnterJoinCodeUI;
         hostBtn.RegisterCallback<MouseEnterEvent>(PlaySound);
         lobbyBtn.RegisterCallback<MouseEnterEvent>(PlaySound);
+        joinCodeBtn.RegisterCallback<MouseEnterEvent>(PlaySound);
     }
 
+    void ShowEnterJoinCodeUI()
+    {
+        UISoundEffectsManager.instance.PlayBoomSFX();
+        _joinCodeMenu.SetActive(true);
+    }
+    
     void StartClient()
     {
         UISoundEffectsManager.instance.PlayBoomSFX();
-        NetworkManager.Singleton.StartClient();
+        LobbyAPI.instance.QuickJoin();
+        // NetworkManager.Singleton.StartClient();
         //  OnShowLobby?.Invoke();
         //  _lobbyMenu.SetActive(true);
         //  this.gameObject.SetActive(false);
