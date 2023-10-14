@@ -44,7 +44,7 @@ public class GameNetworkManager : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Duplicate instance of this class");
+            Debug.Log("Duplicate instance of GameNetwork class");
             Destroy(gameObject);
         }
     }
@@ -303,6 +303,7 @@ public class GameNetworkManager : NetworkBehaviour
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
             SceneManager.LoadScene("MainMenuScene");
+            LobbyAPI.instance.currentLobby = null;
         }
     }
     #endregion

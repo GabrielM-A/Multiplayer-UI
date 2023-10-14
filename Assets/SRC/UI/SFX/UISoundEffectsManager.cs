@@ -17,7 +17,7 @@ namespace UI.SFX
             }
             else
             {
-                Debug.Log("Duplicate instance of this class");
+                Debug.Log("Duplicate instance of UISounds class");
                 Destroy(gameObject);
             }
         }

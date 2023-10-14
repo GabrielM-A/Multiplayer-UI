@@ -15,7 +15,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Duplicate instance of this class");
+            Debug.Log("Duplicate instance of CharacterSelectionManager class");
             Destroy(gameObject);
         }
     }

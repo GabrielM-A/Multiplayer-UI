@@ -1080,6 +1080,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8404467089797206647, guid: e4315bfe8b5282241a79146a7696f0de,
+        type: 3}
+      propertyPath: _uiLoading
+      value: 
+      objectReference: {fileID: 686444279}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
