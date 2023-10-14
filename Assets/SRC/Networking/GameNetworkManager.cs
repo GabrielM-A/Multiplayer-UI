@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -64,9 +65,9 @@ public class GameNetworkManager : NetworkBehaviour
     /** Events for the main menu - single player and multiplayer */
     private void OnEnable()
     {
-        MainMenu.OnStartGame += StartGame;
-        MainMenu.OnShowLobby += ShowLobby;
-        MainMenu.OnStartHost += ShowLobbyCreateMenu;
+        UIMainMenu.OnStartGame += StartGame;
+        UIMainMenu.OnShowLobby += ShowLobby;
+        UIMainMenu.OnStartHost += ShowLobbyCreateMenu;
     }
 
     /** Single Player - Starts the game */
@@ -100,7 +101,8 @@ public class GameNetworkManager : NetworkBehaviour
             index = playerDataNetworkList.Count,
             characterId = colorList[playerDataNetworkList.Count],
             playerReady = false,
-            playerName = GetPlayerName()
+            playerName = GetPlayerName(),
+            playerId = AuthenticationService.Instance.PlayerId
         });
         Debug.Log("PLAYER CONNECTED: " + playerDataNetworkList[0].playerName);
         if (playerDataNetworkList.Count <= 1) return; 
@@ -158,10 +160,22 @@ public class GameNetworkManager : NetworkBehaviour
         Debug.Log("BAKED INTO NETWORK LIST: " + playerDataNetworkList[playerData.index].playerName);
     }
 
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default)
+    {
+        Debug.Log("SERVER RPC PLAYER NAME: " + playerId);
+        PlayerData playerData = GetPlayerDataFromClientId(serverRpcParams.Receive.SenderClientId);
+        playerData.playerId = playerId;
+        playerDataNetworkList[playerData.index] = playerData;
+        Debug.Log("BAKED INTO NETWORK LIST: " + playerDataNetworkList[playerData.index].playerId);
+    }
+    
     private void OnClientUserConnected(ulong obj)
     {
         Debug.Log("CLIENT CONNECTED: " + GetPlayerName());
         SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
 
@@ -190,6 +204,7 @@ public class GameNetworkManager : NetworkBehaviour
         {
             Destroy(CharacterSelectionManager.instance.gameObject);
             MoveToWorldSceneClientRpc();
+            LobbyAPI.instance.DeleteLobby();
             NetworkManager.SceneManager.LoadScene(worldSceneName, LoadSceneMode.Single);
         }
     }
@@ -276,6 +291,8 @@ public class GameNetworkManager : NetworkBehaviour
     [ServerRpc]
     public void KickPlayerServerRpc(ulong clientId)
     {
+        PlayerData playerData = GetPlayerDataFromClientId(clientId);
+        LobbyAPI.instance.KickFromLobby(playerData.playerId.ToString());
         SendKickedPlayerBackToMainMenuClientRpc(clientId);
         NetworkManager.Singleton.DisconnectClient(clientId);
     }
@@ -298,9 +315,9 @@ public class GameNetworkManager : NetworkBehaviour
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         }
-        MainMenu.OnStartGame -= StartGame;
-        MainMenu.OnShowLobby -= ShowLobby;
-        MainMenu.OnStartHost -= StartHost;
+        UIMainMenu.OnStartGame -= StartGame;
+        UIMainMenu.OnShowLobby -= ShowLobby;
+        UIMainMenu.OnStartHost -= StartHost;
         // Have to Dispose network list variables
         if (playerDataNetworkList != null && playerDataNetworkList.Count > 0)
         {

@@ -64,5 +64,8 @@ MonoBehaviour:
   _uiDocument: {fileID: 7416597688914305367}
   _styleSheet: {fileID: 7433441132597879392, guid: 5c6ecec30bc40d140be4602e32f754fc,
     type: 3}
-  _lobbyMenu: {fileID: 0}
+  _uiLobbyListMenu: {fileID: 0}
   _joinCodeMenu: {fileID: 0}
+  _uiProfileDialogMenu: {fileID: 0}
+  _uiLoading: {fileID: 0}
+  _uiFailed: {fileID: 0}
