@@ -491,6 +491,7 @@ MonoBehaviour:
   _styleSheet: {fileID: 7433441132597879392, guid: 26d8d96479dca7f4f92a65608d4cc273,
     type: 3}
   _uiLoading: {fileID: 1765059508}
+  _uiFailed: {fileID: 1786441407757610753}
 --- !u!114 &1813775715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,6 +591,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 886b7cd40d2c15944a4eb2574a91dfc7, type: 3}
+--- !u!1 &1786441407757610753 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4004094783117799644, guid: 886b7cd40d2c15944a4eb2574a91dfc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1786441407757610752}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

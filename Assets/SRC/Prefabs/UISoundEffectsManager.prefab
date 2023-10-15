@@ -144,3 +144,4 @@ MonoBehaviour:
   _audioSource: {fileID: 6827129618865099175}
   hoverSFX: {fileID: 8300000, guid: 3ae345e93ff985b4f9bcbc7c03a31c26, type: 3}
   boomSFX: {fileID: 8300000, guid: a05b47c466a407b418b42404ea0d2bbf, type: 3}
+  clickSFX: {fileID: 8300000, guid: 44238787704d7dd44ba092be91f08124, type: 3}
